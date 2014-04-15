@@ -1,3 +1,51 @@
+usage: kvbench <OPTIONS>
+
+DETAILS:
+
+Running a benchmark consists of two steps:
+
+(1) Generate a sample data file using the -o option.
+    Use the -n, -b[01], -k[01], and -v[01] options to control the
+    size of the sample.  Use the -r <seed> option to change the
+    pseudo-random data.  Given identical inputs, an identical data
+    file should be generated.
+
+(2) Consume a sample data file and execute a benchmark using the
+    -i option.  Or use both -o and -i options to generate the data
+    and then run the benchmark.  Use the -d[01] options to control
+    the inter-arrival rate of new row sets to be written to the
+    collection.  The -p option controls how often the benchmark
+    will attempt to iterate over the keys.
+
+OUTPUT OPTIONS
+
+-r <n> - pseudo-random seed
+-n <n> - total number of blocks to generate
+
+-b0 <min> - minimum number of records per block
+-b1 <max> - maximum number of records per block
+
+-k0 <min> - minimum length of key to generate
+-k1 <max> - maximum length of key to generate
+
+-v0 <min> - minium length of value to generate
+-v1 <max> - maximum length of value to generate
+
+-o <dat> - output path for data file
+
+INPUT OPTIONS
+
+-r <n>    - pseudo-random seed
+-d0 <dur> - minimum inter-arrival rate
+-d1 <dur> - maximum inter-arrival rate (not guaranteed)
+-p <dur>  - poll db at this interval and print statistics
+
+-i <dat>   - input path for data file
+-b <bench> - name of the benchmark to run (bolt, kv, leveldb, noop)
+-f <path>  - path to the database
+
+EXAMPLE
+
 ````
 $ ./kvbench -n 100 -b0 0 -b1 4000 -k0 34 -k1 34 -v0 70 -v1 78 -o sample.dat
 2014/04/15 02:41:52 writing data to sample.dat
