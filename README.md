@@ -1,4 +1,6 @@
-usage: kvbench OPTIONS
+USAGE:
+
+kvbench OPTIONS
 
 DETAILS:
 
