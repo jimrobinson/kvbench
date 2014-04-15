@@ -89,7 +89,7 @@ func (b *Benchmark) Run(ch chan []*Row, dur time.Duration) {
 				if b.mu != nil {
 					b.mu.RUnlock()
 				}
-				log.Printf("%s\t%d\t%d ms\n",
+				log.Printf("timing %s\t%d\t%d ms\n",
 					b.id, n, t.Nanoseconds()/1e6)
 				return
 			default:
@@ -101,7 +101,8 @@ func (b *Benchmark) Run(ch chan []*Row, dur time.Duration) {
 				if b.mu != nil {
 					b.mu.RUnlock()
 				}
-				log.Printf("timing %s: %d in %d ms\n", b.id, n, t.Nanoseconds()/1e6)
+				log.Printf("timing %s: %d in %d ms\n",
+					b.id, n, t.Nanoseconds()/1e6)
 			}
 		}
 	}(b, done)
