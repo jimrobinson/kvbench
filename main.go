@@ -9,6 +9,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"runtime"
 	"time"
 )
 
@@ -110,6 +111,8 @@ func main() {
 		fmt.Println(usage)
 		return
 	}
+	
+	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	rnd = rand.New(rand.NewSource(seed))
 
