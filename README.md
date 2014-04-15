@@ -23,16 +23,12 @@ OUTPUT OPTIONS
 
 - -r n - pseudo-random seed
 - -n n - total number of blocks to generate
-
 - -b0 min - minimum number of records per block
 - -b1 max - maximum number of records per block
-
 - -k0 min - minimum length of key to generate
 - -k1 max - maximum length of key to generate
-
 - -v0 min - minium length of value to generate
 - -v1 max - maximum length of value to generate
-
 -o dat - output path for data file
 
 INPUT OPTIONS
@@ -41,7 +37,6 @@ INPUT OPTIONS
 - -d0 dur - minimum inter-arrival rate
 - -d1 dur - maximum inter-arrival rate (not guaranteed)
 - -p dur  - poll db at this interval and print statistics
-
 - -i dat   - input path for data file
 - -b bench - name of the benchmark to run (bolt, kv, leveldb, noop)
 - -f path  - path to the database
