@@ -52,14 +52,14 @@ $ ./kvbench -i sample.dat -b leveldb -f test/leveldb.db -d0 50ms -d1 175ms -p 10
 2014/04/15 03:33:07 timing leveldb: 167529 in 251 ms
 2014/04/15 03:33:17 timing leveldb: 201825 in 263 ms
 2014/04/15 03:33:17 100 row sets arrived at an average inter-arrival rate of 116.951507ms
-2014/04/15 03:33:18 timing leveldb	201825	258 ms
+2014/04/15 03:33:18 timing leveldb: 201825	258 ms
 
 $ ./kvbench -i sample.dat -b bolt -f test/bolt.db -d0 50ms -d1 175ms -p 10s
 2014/04/15 03:34:05 reading data from sample.dat
 2014/04/15 03:34:15 timing bolt: 111277 in 167 ms
 2014/04/15 03:34:26 timing bolt: 201825 in 135 ms
 2014/04/15 03:34:26 100 row sets arrived at an average inter-arrival rate of 189.218376ms
-2014/04/15 03:34:26 timing bolt	201825	135 ms
+2014/04/15 03:34:26 timing bolt: 201825	135 ms
 
 $ ./kvbench -i sample.dat -b kv -f test/kv.db -d0 50ms -d1 175ms -p 10s
 2014/04/15 03:42:20 reading data from sample.dat
@@ -87,7 +87,7 @@ $ ./kvbench -i sample.dat -b kv-mu -f test/kv-mu.db -d0 50ms -d1 175ms -p 10s
 2014/04/15 03:37:54 timing kv-mu: 193287 in 3003 ms
 2014/04/15 03:38:07 timing kv-mu: 201825 in 3568 ms
 2014/04/15 03:38:07 100 row sets arrived at an average inter-arrival rate of 2.110042758s
-2014/04/15 03:38:11 timing kv-mu	201825	3092 ms
+2014/04/15 03:38:11 timing kv-mu: 201825	3092 ms
 
 $ ./kvbench -i sample.dat -b kv -f test/kv-2.db -d0 2s -d1 5s -p 10s
 2014/04/15 02:34:14 reading data from sample.dat
@@ -116,5 +116,5 @@ $ ./kvbench -i sample.dat -b kv -f test/kv-2.db -d0 2s -d1 5s -p 10s
 2014/04/15 02:39:38 timing kv: 194762 in 14047 ms
 2014/04/15 02:39:51 timing kv: 201825 in 2885 ms
 2014/04/15 02:39:51 100 row sets arrived at an average inter-arrival rate of 3.287373923s
-2014/04/15 02:39:53 timing kv	201825	 2615 ms
+2014/04/15 02:39:53 timing kv: 201825	 2615 ms
 ````
