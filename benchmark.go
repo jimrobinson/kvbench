@@ -45,7 +45,7 @@ func NewBenchmark(id string, path string) (b *Benchmark, err error) {
 func (b *Benchmark) Run(ch chan []*Row, dur time.Duration) {
 	done := make(chan bool)
 
-	go func(b *Benchmark, ch chan []*Row) {
+	go func(b *Benchmark, ch chan []*Row, done chan bool) {
 		n := int64(0)        // row set counter
 		ns := int64(0)       // elapsed time in nanoseconds
 		var t0, t1 time.Time // time between arrivals
@@ -75,7 +75,7 @@ func (b *Benchmark) Run(ch chan []*Row, dur time.Duration) {
 			log.Printf("%d row sets arrived at an average inter-arrival rate of %s",
 				n, time.Duration(ns/n))
 		}
-	}(b, ch)
+	}(b, ch, done)
 
 	go func(b *Benchmark, done <-chan bool) {
 		defer b.wg.Done()
