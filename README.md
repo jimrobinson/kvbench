@@ -1,3 +1,4 @@
+````
 $ ./kvbench -n 100 -b0 0 -b1 4000 -k0 34 -k1 34 -v0 70 -v1 78 -o sample.dat
 2014/04/15 02:41:52 writing data to sample.dat
 
@@ -49,3 +50,4 @@ $ rm -rf test; mkdir test; ./kvbench -i sample.dat -b kv -f test/kv.db -d0 2s -d
 2014/04/15 02:39:51 timing kv: 201825 in 2885 ms
 2014/04/15 02:39:51 100 row sets arrived at an average inter-arrival rate of 3.287373923s
 2014/04/15 02:39:53 kv	201825	 2615 ms
+````
