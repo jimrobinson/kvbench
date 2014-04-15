@@ -9,7 +9,6 @@ import (
 	"log"
 	"math/rand"
 	"os"
-	"sync"
 	"time"
 )
 
@@ -84,22 +83,6 @@ var benchmarkId string
 var databasePath string
 var inputDat string
 
-func NewBenchmark(id string, path string) (c Collection, err error) {
-	switch id {
-	case "bolt":
-		c, err = NewBoltCollection(path)
-	case "kv":
-		c, err = NewKVCollection(path)
-	case "leveldb":
-		c, err = NewLevelDBCollection(path)
-	case "noop":
-		c, err = NewNoopCollection()
-	default:
-		err = fmt.Errorf("unknown benchmark id: %s", id)
-	}
-	return
-}
-
 func main() {
 	flag.BoolVar(&help, "h", false, "print usage")
 
@@ -117,7 +100,7 @@ func main() {
 	flag.DurationVar(&d0, "d0", 500*time.Millisecond, "minimum inter-arrival rate")
 	flag.DurationVar(&d1, "d1", time.Second, "maximum inter-arrival rate (not guaranteed)")
 	flag.DurationVar(&p, "p", 10*time.Second, "poll db at this interval and print statistics")
-	flag.StringVar(&benchmarkId, "b", "", "benchmark id: leveldb, kv, bolt")
+	flag.StringVar(&benchmarkId, "b", "", "benchmark id: leveldb, kv, kv-mu, bolt")
 	flag.StringVar(&databasePath, "f", "", "database path")
 	flag.StringVar(&inputDat, "i", "", "input path for data")
 
@@ -155,13 +138,11 @@ func main() {
 			return
 		}
 
-		collection, err := NewBenchmark(benchmarkId, databasePath)
+		benchmark, err := NewBenchmark(benchmarkId, databasePath)
 		if err != nil {
 			log.Println(err)
 			return
 		}
-
-		wg := &sync.WaitGroup{}
 
 		fh, err := os.Open(inputDat)
 		if err != nil {
@@ -172,8 +153,8 @@ func main() {
 
 		ch := make(chan []*Row, 100)
 
-		wg.Add(1)
-		go runBenchmark(ch, benchmarkId, collection, p, wg)
+		benchmark.wg.Add(1)
+		go benchmark.Run(ch, p)
 
 		log.Printf("reading data from %s\n", inputDat)
 		err = sendData(fh, ch, d0, d1)
@@ -185,57 +166,8 @@ func main() {
 
 		close(ch)
 
-		wg.Wait()
+		benchmark.wg.Wait()
 	}
-}
-
-// runBenchmark runs two goroutines, one to read row sets
-// from ch, writing those rows to the collection, and another
-// to wake up every dur interval and poll the collection for
-// number of records and the time it took to iterate over
-// those records.
-func runBenchmark(ch chan []*Row, id string, c Collection, dur time.Duration, wg *sync.WaitGroup) {
-	done := make(chan bool)
-
-	go func(id string, c Collection, ch chan []*Row) {
-		n := int64(0)        // row set counter
-		ns := int64(0)       // elapsed time in nanoseconds
-		var t0, t1 time.Time // time between arrivals
-		for rows := range ch {
-			n, t1 = n+1, time.Now()
-			if n > 1 {
-				ns += t1.Sub(t0).Nanoseconds()
-			}
-			t0 = t1
-
-			err := c.Set(rows)
-			if err != nil {
-				log.Println(err)
-				return
-			}
-		}
-
-		done <- true
-		if n > 0 {
-			log.Printf("%d row sets arrived at an average inter-arrival rate of %s", n, time.Duration(ns/n))
-		}
-	}(id, c, ch)
-
-	go func(id string, c Collection, done <-chan bool, wg *sync.WaitGroup) {
-		defer wg.Done()
-		for {
-			select {
-			case _ = <-done:
-				n, t := c.Timing()
-				log.Printf("%s\t%d\t%d ms\n", id, n, t.Nanoseconds()/1e6)
-				return
-			default:
-				time.Sleep(dur)
-				n, t := c.Timing()
-				log.Printf("timing %s: %d in %d ms\n", id, n, t.Nanoseconds()/1e6)
-			}
-		}
-	}(id, c, done, wg)
 }
 
 // sendData reads record blocks from r and sends them to ch.
