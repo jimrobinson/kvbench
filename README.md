@@ -47,27 +47,49 @@ EXAMPLE
 $ ./kvbench -n 100 -b0 0 -b1 4000 -k0 34 -k1 34 -v0 70 -v1 78 -o sample.dat
 2014/04/15 02:41:52 writing data to sample.dat
 
-$ rm -rf test; mkdir test; ./kvbench -i sample.dat -b leveldb -f test/leveldb.db -d0 50ms -d1 175ms -p 10s
-2014/04/15 02:40:56 reading data from sample.dat
-2014/04/15 02:41:06 timing leveldb: 170828 in 286 ms
-2014/04/15 02:41:16 timing leveldb: 201825 in 315 ms
-2014/04/15 02:41:16 100 row sets arrived at an average inter-arrival rate of 116.036663ms
-2014/04/15 02:41:17 leveldb 201825	 304 ms
+$ ./kvbench -i sample.dat -b leveldb -f test/leveldb.db -d0 50ms -d1 175ms -p 10s
+2014/04/15 03:32:57 reading data from sample.dat
+2014/04/15 03:33:07 timing leveldb: 167529 in 251 ms
+2014/04/15 03:33:17 timing leveldb: 201825 in 263 ms
+2014/04/15 03:33:17 100 row sets arrived at an average inter-arrival rate of 116.951507ms
+2014/04/15 03:33:18 leveldb	201825	258 ms
 
-$ rm -rf test; mkdir test; ./kvbench -i sample.dat -b bolt -f test/bolt.db -d0 50ms -d1 175ms -p 10s
-2014/04/15 02:41:26 reading data from sample.dat
-2014/04/15 02:41:36 timing bolt: 124452 in 118 ms
-2014/04/15 02:41:46 timing bolt: 201825 in 177 ms
-2014/04/15 02:41:46 100 row sets arrived at an average inter-arrival rate of 156.916447ms
-2014/04/15 02:41:47 bolt    201825	 163 ms
+$ ./kvbench -i sample.dat -b bolt -f test/bolt.db -d0 50ms -d1 175ms -p 10s
+2014/04/15 03:34:05 reading data from sample.dat
+2014/04/15 03:34:15 timing bolt: 111277 in 167 ms
+2014/04/15 03:34:26 timing bolt: 201825 in 135 ms
+2014/04/15 03:34:26 100 row sets arrived at an average inter-arrival rate of 189.218376ms
+2014/04/15 03:34:26 bolt	201825	135 ms
 
-$ rm -rf test; mkdir test; ./kvbench -i sample.dat -b kv -f test/kv.db -d0 50ms -d1 175ms -p 10s
-2014/04/15 02:43:12 reading data from sample.dat
+$ ./kvbench -i sample.dat -b kv -f test/kv.db -d0 50ms -d1 175ms -p 10s
+2014/04/15 03:42:20 reading data from sample.dat
 ^C
 $ date
-Tue Apr 15 02:43:52 PDT 2014
+Tue Apr 15 03:43:20 PDT 2014
 
-$ rm -rf test; mkdir test; ./kvbench -i sample.dat -b kv -f test/kv.db -d0 2s -d1 5s -p 10s
+$ ./kvbench -i sample.dat -b kv-mu -f test/kv-mu.db -d0 50ms -d1 175ms -p 10s
+2014/04/15 03:34:28 reading data from sample.dat
+2014/04/15 03:34:39 timing kv: 15805 in 454 ms
+2014/04/15 03:34:50 timing kv: 30759 in 484 ms
+2014/04/15 03:35:00 timing kv: 44194 in 317 ms
+2014/04/15 03:35:12 timing kv: 58132 in 912 ms
+2014/04/15 03:35:25 timing kv: 72305 in 496 ms
+2014/04/15 03:35:38 timing kv: 85590 in 1365 ms
+2014/04/15 03:35:51 timing kv: 97478 in 1574 ms
+2014/04/15 03:36:03 timing kv: 107863 in 1642 ms
+2014/04/15 03:36:17 timing kv: 120465 in 1240 ms
+2014/04/15 03:36:30 timing kv: 131497 in 935 ms
+2014/04/15 03:36:42 timing kv: 141729 in 2016 ms
+2014/04/15 03:36:57 timing kv: 153316 in 2457 ms
+2014/04/15 03:37:10 timing kv: 163628 in 2480 ms
+2014/04/15 03:37:25 timing kv: 174095 in 1914 ms
+2014/04/15 03:37:40 timing kv: 184756 in 2912 ms
+2014/04/15 03:37:54 timing kv: 193287 in 3003 ms
+2014/04/15 03:38:07 timing kv: 201825 in 3568 ms
+2014/04/15 03:38:07 100 row sets arrived at an average inter-arrival rate of 2.110042758s
+2014/04/15 03:38:11 kv	201825	3092 ms
+
+$ ./kvbench -i sample.dat -b kv -f test/kv-2.db -d0 2s -d1 5s -p 10s
 2014/04/15 02:34:14 reading data from sample.dat
 2014/04/15 02:34:24 timing kv: 5065 in 65 ms
 2014/04/15 02:34:34 timing kv: 9102 in 123 ms
