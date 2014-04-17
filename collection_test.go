@@ -34,9 +34,7 @@ func TestCollectionLevelDB(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	testCollectionSet(t, "leveldb", c)
-	testCollectionRows(t, "leveldb", c)
-	testCollectionDelete(t, "leveldb", c)
+	testCollection(t, "leveldb", c)
 
 	err = c.Close(true)
 	if err != nil {
@@ -57,9 +55,7 @@ func TestCollectionBolt(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	testCollectionSet(t, "leveldb", c)
-	testCollectionRows(t, "leveldb", c)
-	testCollectionDelete(t, "leveldb", c)
+	testCollection(t, "leveldb", c)
 
 	err = c.Close(true)
 	if err != nil {
@@ -92,15 +88,19 @@ func TestCollectionKV(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	testCollectionSet(t, "leveldb", c)
-	testCollectionRows(t, "leveldb", c)
-	testCollectionDelete(t, "leveldb", c)
+	
+	testCollection(t, "kv", c)
 
 	err = c.Close(true)
 	if err != nil {
 		t.Fatal(err)
 	}
+}
+
+func testCollection(t *testing.T, id string, c Collection) {
+	testCollectionSet(t, id, c)
+	testCollectionRows(t, id, c)
+	testCollectionDelete(t, id, c)
 }
 
 func testCollectionSet(t *testing.T, id string, c Collection) {
