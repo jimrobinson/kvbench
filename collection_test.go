@@ -104,6 +104,9 @@ func testCollection(t *testing.T, id string, c Collection) {
 }
 
 func testCollectionSet(t *testing.T, id string, c Collection) {
+	if len(testRows) == 0 {
+		t.Fatal("zero testRows: did initialization fail?")
+	}
 	err := c.Set(testRows)
 	if err != nil {
 		t.Error(id, "Set", err)
@@ -111,6 +114,9 @@ func testCollectionSet(t *testing.T, id string, c Collection) {
 }
 
 func testCollectionRows(t *testing.T, id string, c Collection) {
+	if len(testRows) == 0 {
+		t.Fatal("zero testRows: did initialization fail?")
+	}
 	ch := c.Rows()
 	arrived := make([]Row, 0, len(testRows))
 	for rows := range ch {
@@ -133,6 +139,9 @@ func testCollectionRows(t *testing.T, id string, c Collection) {
 }
 
 func testCollectionDelete(t *testing.T, id string, c Collection) {
+	if len(testRows) == 0 {
+		t.Fatal("zero testRows: did initialization fail?")
+	}
 	for i, row := range testRows {
 		err := c.Delete(row.Key)
 		if err != nil {
