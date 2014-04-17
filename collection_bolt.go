@@ -23,7 +23,8 @@ func NewBoltCollection(path string) (c Collection, err error) {
 		return
 	}
 	err = boltc.db.Update(func(tx *bolt.Tx) error {
-		return tx.CreateBucketIfNotExists(bucketId)
+		_, err := tx.CreateBucketIfNotExists(bucketId)
+		return err
 	})
 	return boltc, err
 }
