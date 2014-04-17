@@ -5,7 +5,7 @@ kvbench OPTIONS
 OVERVIEW
 
 kvbench is a simple benchmarking tool to evaluate the read performance
-of a key/value store while writes are being applied parallel.
+of a key/value store while writes are being applied in parallel.
 
 DETAILS:
 
