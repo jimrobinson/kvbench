@@ -84,7 +84,7 @@ func TestRandomWriteSend(t *testing.T) {
 						t.Errorf("rows[%d] arrived after %s, expected it to be >= %s",
 							i, delay, d0)
 					}
-					if n := delay.Nanoseconds() - d1.Nanoseconds(); n > 1e9 {
+					if n := delay.Nanoseconds() - d1.Nanoseconds(); n > 1e6 {
 						t.Errorf("rows[%d] arrived after %s, expected it to be <= %s",
 							i, delay, d1)
 					}
