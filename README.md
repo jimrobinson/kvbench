@@ -2,6 +2,11 @@ USAGE:
 
 kvbench OPTIONS
 
+OVERVIEW
+
+kvbench is a simple benchmarking tool to evaluate the read performance
+of a key/value store while writes are being applied parallel.
+
 DETAILS:
 
 Running a benchmark consists of two steps:
@@ -38,83 +43,85 @@ INPUT OPTIONS
 - -d1 dur - maximum inter-arrival rate (not guaranteed)
 - -p dur  - poll db at this interval and print statistics
 - -i dat   - input path for data file
-- -b bench - name of the benchmark to run (bolt, kv, leveldb, noop)
+- -b bench - name of the benchmark to run (bolt, kv, kv-mu, leveldb, noop)
 - -f path  - path to the database
 
 EXAMPLE
 
 ````
 $ ./kvbench -n 100 -b0 0 -b1 4000 -k0 34 -k1 34 -v0 70 -v1 78 -o sample.dat
-2014/04/15 02:41:52 writing data to sample.dat
+2014/04/16 19:57:46 writing data to sample.dat
 
 $ ./kvbench -i sample.dat -b leveldb -f test/leveldb.db -d0 50ms -d1 175ms -p 10s
-2014/04/15 03:32:57 reading data from sample.dat
-2014/04/15 03:33:07 timing leveldb: 167529 in 251 ms
-2014/04/15 03:33:17 timing leveldb: 201825 in 263 ms
-2014/04/15 03:33:17 100 row sets arrived at an average inter-arrival rate of 116.951507ms
-2014/04/15 03:33:18 timing leveldb: 201825 in 258 ms
+2014/04/16 19:57:51 reading data from sample.dat
+2014/04/16 19:58:02 leveldb: 178046 ops in 296 ms: 601 ops/ms
+2014/04/16 19:58:12 leveldb: 202517 ops in 315 ms: 642 ops/ms
+2014/04/16 19:58:12 100 row sets arrived at an average inter-arrival rate of 116.046572ms
+2014/04/16 19:58:12 leveldb: 202517 ops in 308 ms: 657 ops/ms
 
 $ ./kvbench -i sample.dat -b bolt -f test/bolt.db -d0 50ms -d1 175ms -p 10s
-2014/04/15 03:34:05 reading data from sample.dat
-2014/04/15 03:34:15 timing bolt: 111277 in 167 ms
-2014/04/15 03:34:26 timing bolt: 201825 in 135 ms
-2014/04/15 03:34:26 100 row sets arrived at an average inter-arrival rate of 189.218376ms
-2014/04/15 03:34:26 timing bolt: 201825 in 135 ms
+2014/04/16 19:58:31 reading data from sample.dat
+2014/04/16 19:58:41 bolt: 151830 ops in 141 ms: 1076 ops/ms
+2014/04/16 19:58:51 bolt: 202517 ops in 210 ms: 964 ops/ms
+2014/04/16 19:58:51 100 row sets arrived at an average inter-arrival rate of 134.606206ms
+2014/04/16 19:58:51 bolt: 202517 ops in 168 ms: 1205 ops/ms
 
 $ ./kvbench -i sample.dat -b kv -f test/kv.db -d0 50ms -d1 175ms -p 10s
-2014/04/15 03:42:20 reading data from sample.dat
+2014/04/16 19:58:53 reading data from sample.dat
 ^C
+
 $ date
-Tue Apr 15 03:43:20 PDT 2014
+Wed Apr 16 19:59:54 PDT 2014
 
 $ ./kvbench -i sample.dat -b kv-mu -f test/kv-mu.db -d0 50ms -d1 175ms -p 10s
-2014/04/15 03:34:28 reading data from sample.dat
-2014/04/15 03:34:39 timing kv-mu: 15805 in 454 ms
-2014/04/15 03:34:50 timing kv-mu: 30759 in 484 ms
-2014/04/15 03:35:00 timing kv-mu: 44194 in 317 ms
-2014/04/15 03:35:12 timing kv-mu: 58132 in 912 ms
-2014/04/15 03:35:25 timing kv-mu: 72305 in 496 ms
-2014/04/15 03:35:38 timing kv-mu: 85590 in 1365 ms
-2014/04/15 03:35:51 timing kv-mu: 97478 in 1574 ms
-2014/04/15 03:36:03 timing kv-mu: 107863 in 1642 ms
-2014/04/15 03:36:17 timing kv-mu: 120465 in 1240 ms
-2014/04/15 03:36:30 timing kv-mu: 131497 in 935 ms
-2014/04/15 03:36:42 timing kv-mu: 141729 in 2016 ms
-2014/04/15 03:36:57 timing kv-mu: 153316 in 2457 ms
-2014/04/15 03:37:10 timing kv-mu: 163628 in 2480 ms
-2014/04/15 03:37:25 timing kv-mu: 174095 in 1914 ms
-2014/04/15 03:37:40 timing kv-mu: 184756 in 2912 ms
-2014/04/15 03:37:54 timing kv-mu: 193287 in 3003 ms
-2014/04/15 03:38:07 timing kv-mu: 201825 in 3568 ms
-2014/04/15 03:38:07 100 row sets arrived at an average inter-arrival rate of 2.110042758s
-2014/04/15 03:38:11 timing kv-mu: 201825 in 3092 ms
+2014/04/16 20:00:01 reading data from sample.dat
+2014/04/16 20:00:12 kv-mu: 18575 ops in 378 ms: 49 ops/ms
+2014/04/16 20:00:24 kv-mu: 34127 ops in 588 ms: 58 ops/ms
+2014/04/16 20:00:36 kv-mu: 50581 ops in 554 ms: 91 ops/ms
+2014/04/16 20:00:49 kv-mu: 65373 ops in 1267 ms: 51 ops/ms
+2014/04/16 20:01:00 kv-mu: 78226 ops in 1108 ms: 70 ops/ms
+2014/04/16 20:01:12 kv-mu: 90815 ops in 1395 ms: 65 ops/ms
+2014/04/16 20:01:25 kv-mu: 102478 ops in 2174 ms: 47 ops/ms
+2014/04/16 20:01:38 kv-mu: 112228 ops in 1869 ms: 60 ops/ms
+2014/04/16 20:01:51 kv-mu: 122214 ops in 2357 ms: 51 ops/ms
+2014/04/16 20:02:06 kv-mu: 133389 ops in 1981 ms: 67 ops/ms
+2014/04/16 20:02:18 kv-mu: 142738 ops in 1950 ms: 73 ops/ms
+2014/04/16 20:02:30 kv-mu: 150676 ops in 1979 ms: 76 ops/ms
+2014/04/16 20:02:46 kv-mu: 161695 ops in 2518 ms: 64 ops/ms
+2014/04/16 20:03:00 kv-mu: 170495 ops in 2986 ms: 57 ops/ms
+2014/04/16 20:03:16 kv-mu: 180825 ops in 3610 ms: 50 ops/ms
+2014/04/16 20:03:33 kv-mu: 191325 ops in 3493 ms: 54 ops/ms
+2014/04/16 20:03:48 kv-mu: 198455 ops in 4151 ms: 47 ops/ms
+2014/04/16 20:04:01 kv-mu: 202517 ops in 3252 ms: 62 ops/ms
+2014/04/16 20:04:01 100 row sets arrived at an average inter-arrival rate of 2.300565857s
+2014/04/16 20:04:05 kv-mu: 202517 ops in 3538 ms: 57 ops/ms
 
 $ ./kvbench -i sample.dat -b kv -f test/kv-2.db -d0 2s -d1 5s -p 10s
-2014/04/15 02:34:14 reading data from sample.dat
-2014/04/15 02:34:24 timing kv: 5065 in 65 ms
-2014/04/15 02:34:34 timing kv: 9102 in 123 ms
-2014/04/15 02:34:46 timing kv: 15781 in 2396 ms
-2014/04/15 02:34:57 timing kv: 21875 in 287 ms
-2014/04/15 02:35:07 timing kv: 26462 in 371 ms
-2014/04/15 02:35:17 timing kv: 31663 in 419 ms
-2014/04/15 02:35:32 timing kv: 41591 in 4623 ms
-2014/04/15 02:35:43 timing kv: 48843 in 640 ms
-2014/04/15 02:35:53 timing kv: 55129 in 670 ms
-2014/04/15 02:36:04 timing kv: 62049 in 799 ms
-2014/04/15 02:36:18 timing kv: 69230 in 3993 ms
-2014/04/15 02:36:30 timing kv: 73580 in 1801 ms
-2014/04/15 02:36:41 timing kv: 83055 in 1091 ms
-2014/04/15 02:36:59 timing kv: 93630 in 7983 ms
-2014/04/15 02:37:13 timing kv: 103533 in 3580 ms
-2014/04/15 02:37:28 timing kv: 112750 in 5834 ms
-2014/04/15 02:37:46 timing kv: 125726 in 7201 ms
-2014/04/15 02:37:59 timing kv: 135485 in 3218 ms
-2014/04/15 02:38:12 timing kv: 139912 in 3156 ms
-2014/04/15 02:38:30 timing kv: 143677 in 8375 ms
-2014/04/15 02:38:54 timing kv: 166526 in 13873 ms
-2014/04/15 02:39:14 timing kv: 179326 in 9380 ms
-2014/04/15 02:39:38 timing kv: 194762 in 14047 ms
-2014/04/15 02:39:51 timing kv: 201825 in 2885 ms
-2014/04/15 02:39:51 100 row sets arrived at an average inter-arrival rate of 3.287373923s
-2014/04/15 02:39:53 timing kv: 201825 in 2615 ms
+2014/04/16 20:04:40 reading data from sample.dat
+2014/04/16 20:04:50 kv: 2936 ops in 39 ms: 75 ops/ms
+2014/04/16 20:05:00 kv: 7593 ops in 110 ms: 69 ops/ms
+2014/04/16 20:05:11 kv: 14963 ops in 287 ms: 52 ops/ms
+2014/04/16 20:05:21 kv: 20289 ops in 274 ms: 74 ops/ms
+2014/04/16 20:05:33 kv: 27723 ops in 2334 ms: 11 ops/ms
+2014/04/16 20:05:44 kv: 34127 ops in 469 ms: 72 ops/ms
+2014/04/16 20:05:54 kv: 40052 ops in 524 ms: 76 ops/ms
+2014/04/16 20:06:05 kv: 44990 ops in 672 ms: 66 ops/ms
+2014/04/16 20:06:16 kv: 51604 ops in 733 ms: 70 ops/ms
+2014/04/16 20:06:27 kv: 58077 ops in 976 ms: 59 ops/ms
+2014/04/16 20:06:39 kv: 69760 ops in 2488 ms: 28 ops/ms
+2014/04/16 20:06:50 kv: 77416 ops in 1133 ms: 68 ops/ms
+2014/04/16 20:07:02 kv: 82087 ops in 1714 ms: 47 ops/ms
+2014/04/16 20:07:13 kv: 88134 ops in 1253 ms: 70 ops/ms
+2014/04/16 20:07:27 kv: 97417 ops in 3505 ms: 27 ops/ms
+2014/04/16 20:07:44 kv: 107525 ops in 7438 ms: 14 ops/ms
+2014/04/16 20:08:00 kv: 118256 ops in 6163 ms: 19 ops/ms
+2014/04/16 20:08:16 kv: 130346 ops in 5284 ms: 24 ops/ms
+2014/04/16 20:08:36 kv: 143446 ops in 10035 ms: 14 ops/ms
+2014/04/16 20:08:48 kv: 150676 ops in 2252 ms: 66 ops/ms
+2014/04/16 20:09:04 kv: 158712 ops in 6425 ms: 24 ops/ms
+2014/04/16 20:09:41 kv: 184613 ops in 26382 ms: 6 ops/ms
+2014/04/16 20:10:00 kv: 197430 ops in 9778 ms: 20 ops/ms
+2014/04/16 20:10:15 kv: 202517 ops in 4464 ms: 45 ops/ms
+2014/04/16 20:10:15 100 row sets arrived at an average inter-arrival rate of 3.28728241s
+2014/04/16 20:10:18 kv: 202517 ops in 3482 ms: 58 ops/ms
 ````
