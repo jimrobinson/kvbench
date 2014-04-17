@@ -18,11 +18,13 @@ Running a benchmark consists of two steps:
     file should be generated.
 
 (2) Consume a sample data file and execute a benchmark using the
-    -i option.  Or use both -o and -i options to generate the data
-    and then run the benchmark.  Use the -d[01] options to control
-    the inter-arrival rate of new row sets to be written to the
-    collection.  The -p option controls how often the benchmark
-    will attempt to iterate over the keys.
+    -i option.  Use the -d[01] options to control the inter-arrival
+    rate of new row sets to be written to the collection.  The -p
+    option controls how often the benchmark will attempt to iterate
+    over the keys.
+
+You may specify both -o and -i options to generate the data and
+then immediatly run the benchmark.
 
 OUTPUT OPTIONS
 
@@ -32,7 +34,7 @@ OUTPUT OPTIONS
 - -b1 max - maximum number of records per block
 - -k0 min - minimum length of key to generate
 - -k1 max - maximum length of key to generate
-- -v0 min - minium length of value to generate
+- -v0 min - minimum length of value to generate
 - -v1 max - maximum length of value to generate
 -o dat - output path for data file
 
