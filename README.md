@@ -24,7 +24,7 @@ Running a benchmark consists of two steps:
     over the keys.
 
 You may specify both -o and -i options to generate the data and
-then immediatly run the benchmark.
+then immediately run the benchmark.
 
 OUTPUT OPTIONS
 
