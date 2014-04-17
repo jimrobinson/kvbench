@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io"
 	"math/rand"
-	"time"
 	"sync"
+	"time"
 )
 
 // Random provides a source for pseudo-random

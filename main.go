@@ -105,7 +105,7 @@ func main() {
 		fmt.Println(usage)
 		return
 	}
-	
+
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	rnd := NewRandom(seed)

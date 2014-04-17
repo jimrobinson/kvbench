@@ -78,7 +78,7 @@ func TestCollectionKV(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	
+
 	err = os.Remove(fh.Name())
 	if err != nil {
 		t.Fatal(err)
@@ -88,7 +88,7 @@ func TestCollectionKV(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	
+
 	testCollection(t, "kv", c)
 
 	err = c.Close(true)

@@ -11,10 +11,10 @@ import (
 // quickly the collection can iterate over its data
 // set while writes are being applied.
 type Benchmark struct {
-	id string
-	c  Collection
-	mu *sync.RWMutex
-	wg *sync.WaitGroup
+	id   string
+	c    Collection
+	mu   *sync.RWMutex
+	wg   *sync.WaitGroup
 	done chan bool
 }
 
@@ -23,8 +23,8 @@ type Benchmark struct {
 // id and database path.
 func NewBenchmark(id string, path string) (b *Benchmark, err error) {
 	b = &Benchmark{
-		id: id,
-		wg: &sync.WaitGroup{},
+		id:   id,
+		wg:   &sync.WaitGroup{},
 		done: make(chan bool),
 	}
 
@@ -43,7 +43,7 @@ func NewBenchmark(id string, path string) (b *Benchmark, err error) {
 	default:
 		err = fmt.Errorf("unknown benchmark id: %s", id)
 	}
-	
+
 	return
 }
 
