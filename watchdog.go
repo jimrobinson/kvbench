@@ -8,7 +8,7 @@ import (
 
 // WatchDog provides a mechanism to time out on
 // a benchmark if too much time has elapsed since
-// the most recent operation.
+// for an operation.
 type WatchDog struct {
 	sync.Mutex
 
@@ -30,7 +30,8 @@ func (guard *WatchDog) Timer(dur time.Duration) (ch <-chan time.Time) {
 	return time.NewTimer(dur).C
 }
 
-// Abort sets the watchdog to the aborted state
+// Abort sets the watchdog to the aborted state,
+// indicating that a timeout has been triggered.
 func (guard *WatchDog) Abort(msg string) {
 	guard.Lock()
 	guard.aborted = true
@@ -39,7 +40,8 @@ func (guard *WatchDog) Abort(msg string) {
 }
 
 // IsAborted returns true if the watchdog
-// has been triggered
+// has been aborted due to a timeout being
+// reached.
 func (guard *WatchDog) IsAborted() bool {
 	guard.Lock()
 	defer guard.Unlock()
