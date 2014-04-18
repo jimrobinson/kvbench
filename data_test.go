@@ -94,33 +94,33 @@ func TestRandomWriteSend(t *testing.T) {
 				var row *Row
 				for j, row = range rows {
 					if x := len(row.Key.b); x < k0 {
-						t.Error("rows[%d][%d].Key.b was %d, expected it to be >= %d",
+						t.Errorf("rows[%d][%d].Key.b was %d, expected it to be >= %d",
 							i, j, x, k0)
 					}
 
 					if x := len(row.Key.b); x > k1 {
-						t.Error("rows[%d][%d].Key.b was %d, expected it to be <= %d",
+						t.Errorf("rows[%d][%d].Key.b was %d, expected it to be <= %d",
 							i, j, x, k1)
 					}
 
 					if x := len(row.Value.b); x < v0 {
-						t.Error("rows[%d][%d].Value.b was %d, expected it to be >= %d",
+						t.Errorf("rows[%d][%d].Value.b was %d, expected it to be >= %d",
 							i, j, x, v0)
 					}
 
 					if x := len(row.Value.b); x > v1 {
-						t.Error("rows[%d][%d].Value.b was %d, expected it to be <= %d",
+						t.Errorf("rows[%d][%d].Value.b was %d, expected it to be <= %d",
 							i, j, x, v1)
 					}
 				}
 
 				if j < b0 {
-					t.Error("rows[%d] contained %d items, expected it to be >= %d",
+					t.Errorf("rows[%d] contained %d items, expected it to be >= %d",
 						i, j, b0)
 				}
 
 				if j > b1 {
-					t.Error("rows[%d] contained %d items, expected it to be <= %d",
+					t.Errorf("rows[%d] contained %d items, expected it to be <= %d",
 						i, j, b1)
 				}
 
@@ -128,7 +128,7 @@ func TestRandomWriteSend(t *testing.T) {
 			}
 
 			if i != n {
-				t.Error("expected %d row sets, got %d", n, i)
+				t.Errorf("expected %d row sets, got %d", n, i)
 			}
 
 		}(ch, d0, d1, n, b0, b1, k0, k1, v0, v1)
