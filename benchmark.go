@@ -189,8 +189,8 @@ func (b *Benchmark) poller(cycle, timeout time.Duration) {
 
 				i, t := b.c.Timing()
 
-				*n += i
-				*read_t += t
+				*n += i      // increment total rows read
+				*read_t += t // increment elapsed time reading
 
 				if b.mu != nil {
 					b.mu.RUnlock()
