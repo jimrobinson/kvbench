@@ -158,5 +158,4 @@ func (rnd *Random) Send(ch chan []*Row, r io.Reader, d0, d1 time.Duration) (err 
 		t0 = time.Now()
 		ch <- rows
 	}
-	return
 }
