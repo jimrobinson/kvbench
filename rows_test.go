@@ -32,7 +32,7 @@ func init() {
 
 func TestRowKeyDecodeEncode(t *testing.T) {
 	if len(testKey) != len(testValue) {
-		t.Fatal("len(testKey) [%d] != len(testValue) [%d]", len(testKey), len(testValue))
+		t.Fatalf("len(testKey) [%d] != len(testValue) [%d]", len(testKey), len(testValue))
 	}
 	for i := 0; i < len(testKey); i++ {
 		rk, err := DecodeRowKey(testKey[i])
@@ -56,7 +56,7 @@ func TestRowKeyDecodeEncode(t *testing.T) {
 
 func TestRowValueDecodeEncode(t *testing.T) {
 	if len(testKey) != len(testValue) {
-		t.Fatal("len(testKey) [%d] != len(testValue) [%d]", len(testKey), len(testValue))
+		t.Fatalf("len(testKey) [%d] != len(testValue) [%d]", len(testKey), len(testValue))
 	}
 	for i := 0; i < len(testValue); i++ {
 		rv, err := DecodeRowValue(testValue[i])
