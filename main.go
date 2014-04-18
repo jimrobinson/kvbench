@@ -52,11 +52,15 @@ INPUT OPTIONS
 -r n    - pseudo-random seed
 -d0 dur - minimum inter-arrival rate
 -d1 dur - maximum inter-arrival rate (not guaranteed)
--p dur  - poll db at this interval and print statistics
 
 -i dat   - input path for data file
 -b bench - name of the benchmark to run (bolt, kv, leveldb, noop)
 -f path  - path to the database
+
+-p dur  - poll db at this interval and print statistics
+-wlog n  - log every N write operations (approximate)
+-mr dur - abort if a read takes longer than this duration
+-mw dur - abort if a write takes longer than this duration
 `
 var help bool
 
@@ -78,6 +82,10 @@ var benchmarkId string
 var databasePath string
 var inputDat string
 
+var wlog int
+var mr time.Duration
+var mw time.Duration
+
 func main() {
 	flag.BoolVar(&help, "h", false, "print usage")
 
@@ -98,6 +106,9 @@ func main() {
 	flag.StringVar(&benchmarkId, "b", "", "benchmark id: leveldb, kv, kv-mu, bolt")
 	flag.StringVar(&databasePath, "f", "", "database path")
 	flag.StringVar(&inputDat, "i", "", "input path for data")
+	flag.IntVar(&wlog, "wlog", 100000, "log after this many write operations")
+	flag.DurationVar(&mw, "mw", time.Minute, "abort if a write takes longer than this duration")
+	flag.DurationVar(&mr, "mr", time.Minute, "abort if a read takes longer than this duration")
 
 	flag.Parse()
 
@@ -116,7 +127,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		log.Printf("writing data to %s\n", outputDat)
+		log.Printf("writing %s\n", outputDat)
 		err = rnd.Write(fh, blocks, b0, b1, k0, k1, v0, v1)
 		if err != nil {
 			log.Fatal(err)
@@ -135,12 +146,6 @@ func main() {
 			return
 		}
 
-		benchmark, err := NewBenchmark(benchmarkId, databasePath)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-
 		fh, err := os.Open(inputDat)
 		if err != nil {
 			log.Fatal(err)
@@ -148,20 +153,37 @@ func main() {
 
 		defer fh.Close()
 
-		ch := make(chan []*Row, 100)
-
-		benchmark.Run(ch, p)
-
-		log.Printf("reading data from %s\n", inputDat)
-		err = rnd.Send(ch, fh, d0, d1)
+		// create a new benchmark
+		benchmark, err := NewBenchmark(benchmarkId, databasePath)
 		if err != nil {
-			if err != io.EOF {
-				log.Println(err)
-			}
+			log.Println(err)
+			return
 		}
 
-		close(ch)
+		// feed input data to the channel
+		ch := make(chan []*Row, 100)
+		go func() {
+			log.Printf("reading %s\n", inputDat)
+			err = rnd.Send(ch, fh, d0, d1)
+			if err != nil {
+				if err != io.EOF {
+					log.Println(err)
+				}
+			}
 
-		benchmark.Wait()
+			close(ch)
+		}()
+
+		// consume the channel to run the benchmark,
+		// log every every wlog writes (approximately),
+		// and poll the collection every p duration.
+		benchmark.Run(ch, wlog, mw, p, mr)
+
+		// wait for benchmark to complete, checking
+		// whether or not it aborted.
+		aborted := benchmark.Wait()
+		if aborted {
+			log.Println("Benchmark aborted")
+		}
 	}
 }
