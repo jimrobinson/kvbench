@@ -11,6 +11,7 @@ import (
 type KVCollection struct {
 	sync.WaitGroup
 	db *kv.DB
+	mu sync.Mutex
 }
 
 func NewKVCollection(path string) (c Collection, err error) {
@@ -39,6 +40,8 @@ func (c *KVCollection) Rows() (ch chan Row) {
 	ch = make(chan Row, 1000)
 
 	go func(ch chan Row) {
+		c.mu.Lock()
+		defer c.mu.Unlock()
 		defer close(ch)
 
 		enum, err := c.db.SeekFirst()
@@ -80,6 +83,11 @@ func (c *KVCollection) Rows() (ch chan Row) {
 }
 
 func (c *KVCollection) Set(rows []*Row) (err error) {
+	c.mu.Lock()
+	c.db.BeginTransaction()
+	defer c.db.Commit()
+	defer c.mu.Unlock()
+
 	for _, row := range rows {
 
 		var bk, bv []byte
@@ -103,6 +111,8 @@ func (c *KVCollection) Set(rows []*Row) (err error) {
 }
 
 func (c *KVCollection) Delete(k RowKey) (err error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	var bk []byte
 	bk, err = k.Bytes()
 	if err != nil {
