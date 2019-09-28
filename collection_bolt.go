@@ -17,7 +17,7 @@ type BoltCollection struct {
 func NewBoltCollection(path string) (c Collection, err error) {
 	boltc := &BoltCollection{}
 
-	boltc.db, err = bolt.Open(path, 0644)
+	boltc.db, err = bolt.Open(path, 0644, nil)
 	if err != nil {
 		err = fmt.Errorf("unable to open %s: %v", path, err)
 		return
@@ -120,7 +120,7 @@ func (c *BoltCollection) Delete(k RowKey) (err error) {
 func (c *BoltCollection) Timing() (int, time.Duration) {
 	t0 := time.Now()
 	n := 0
-	for _ = range c.Rows() {
+	for range c.Rows() {
 		n++
 	}
 	t1 := time.Now()

@@ -113,7 +113,7 @@ func (c *LevelDBCollection) Delete(k RowKey) (err error) {
 func (c *LevelDBCollection) Timing() (int, time.Duration) {
 	t0 := time.Now()
 	n := 0
-	for _ = range c.Rows() {
+	for range c.Rows() {
 		n++
 	}
 	t1 := time.Now()
